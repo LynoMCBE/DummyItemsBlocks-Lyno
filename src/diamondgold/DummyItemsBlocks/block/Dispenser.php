@@ -23,7 +23,7 @@ use pocketmine\world\BlockTransaction;
 class Dispenser extends Opaque
 {
     use AnyFacingTrait;
-    use DummyTileTrait;
+    // use DummyTileTrait;
 
     protected bool $triggered = false;
 
@@ -50,10 +50,4 @@ class Dispenser extends Opaque
         return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
     }
 
-    protected function writeDefaultTileData(CompoundTag $tag): void
-    {
-        $tag->setString(Tile::TAG_ID, in_array($this->getName(), [TileNames::DISPENSER, TileNames::DROPPER]) ? $this->getName() : throw new AssumptionFailedError("Invalid dispenser name " . $this->getName())); //hack
-        $this->setTagIfNotExist($tag, Container::TAG_ITEMS, new ListTag([]));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::isMovable, new ByteTag(1));
-    }
 }

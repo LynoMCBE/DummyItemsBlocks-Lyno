@@ -10,6 +10,7 @@ use diamondgold\DummyItemsBlocks\util\Utils;
 use pocketmine\block\Opaque;
 use pocketmine\block\tile\Tile;
 use pocketmine\block\utils\FacesOppositePlacingPlayerTrait;
+use pocketmine\block\utils\HorizontalFacingTrait;
 use pocketmine\data\runtime\RuntimeDataDescriber;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
@@ -24,7 +25,7 @@ class BeeHive extends Opaque
     use FacesOppositePlacingPlayerTrait {
         describeBlockOnlyState as describeFacingState;
     }
-    use DummyTileTrait;
+    // use DummyTileTrait;
 
     protected int $honeyLevel = 0;
 
@@ -46,25 +47,4 @@ class BeeHive extends Opaque
         return $this;
     }
 
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setHoneyLevel(($this->getHoneyLevel() + 1) % 6));// only 0,5 have visible change
-        $player?->sendTip("Honey Level: " . $this->getHoneyLevel());
-        return true;
-    }
-
-    protected function writeDefaultTileData(CompoundTag $tag): void
-    {
-        $tag->setString(Tile::TAG_ID, TileNames::BEEHIVE);
-        $this->setTagIfNotExist($tag, TileNbtTagNames::Occupants, CompoundTag::create()
-            ->setTag(TileNbtTagNames::Occupants, new ListTag([
-                CompoundTag::create()
-                    ->setTag(TileNbtTagNames::Occupants_ActorIdentifier, new StringTag("minecraft:bee<>")) // erm Mojang???
-                    ->setTag(TileNbtTagNames::Occupants_SaveData, CompoundTag::create())
-                    ->setInt(TileNbtTagNames::Occupants_TicksLeftToStay, 0)
-            ]))
-        );
-        $this->setTagIfNotExist($tag, TileNbtTagNames::ShouldSpawnBees, new ByteTag(0));
-    }
 }

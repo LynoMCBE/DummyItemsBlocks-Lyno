@@ -225,7 +225,7 @@ final class Main extends PluginBase
         self::registerSpecialItems($itemsWithoutSpecial);
         self::registerItems($itemsWithoutSpecial);
 
-        $this->registerDummyTiles($blocks);
+        // $this->registerDummyTiles($blocks);
 
         // Server will crash if it tries to send these items to the client
         // These ItemBlocks require block state data when registering
@@ -559,10 +559,6 @@ final class Main extends PluginBase
         if (Utils::removeIfPresent(BlockTypeNames::STRUCTURE_BLOCK, $blocks)) {
             BlockStateRegistration::StructureBlock();
         }
-        // structure_void STRUCTURE_VOID_TYPE string
-        if (Utils::removeIfPresent(BlockTypeNames::STRUCTURE_VOID, $blocks)) {
-            BlockStateRegistration::StructureVoid();
-        }
         // suspicious_gravel suspicious_sand BRUSHED_PROGRESS 0 HANGING T/F
         foreach ([BlockTypeNames::SUSPICIOUS_GRAVEL, BlockTypeNames::SUSPICIOUS_SAND] as $id) {
             if (Utils::removeIfPresent($id, $blocks)) {
@@ -883,77 +879,5 @@ final class Main extends PluginBase
             $meta = $serializeMeta($item);
             return new SavedItemData($id, $meta);
         });
-    }
-
-    /**
-     * @param string[] $blocks
-     * @return void
-     */
-    private function registerDummyTiles(array $blocks): void
-    {
-        // Goal: preserve tile data, not the best way but good enough for decoration purpose
-        // not going to write a separate tile for each block unless absolutely required :P
-        // generic block registration: currently certain newly placed block will not have tile due to generic block registration
-        $tiles = [
-            TileNames::BEEHIVE => [BlockTypeNames::BEEHIVE, BlockTypeNames::BEE_NEST],
-            TileNames::BRUSHABLE_BLOCK => [BlockTypeNames::SUSPICIOUS_GRAVEL, BlockTypeNames::SUSPICIOUS_SAND],
-            TileNames::CALIBRATED_SCULK_SENSOR => [BlockTypeNames::CALIBRATED_SCULK_SENSOR],
-            TileNames::CAMPFIRE => [BlockTypeNames::CAMPFIRE, BlockTypeNames::SOUL_CAMPFIRE],
-            TileNames::CONDUIT => [BlockTypeNames::CONDUIT], // generic block registration, tile not important, activation is client-side, Active Byte 0 Target Long -1 isMovable 1
-            TileNames::COMMAND_BLOCK => [BlockTypeNames::COMMAND_BLOCK, BlockTypeNames::CHAIN_COMMAND_BLOCK, BlockTypeNames::REPEATING_COMMAND_BLOCK],
-            TileNames::CRAFTER => [BlockTypeNames::CRAFTER],
-            TileNames::DECORATED_POT => [BlockTypeNames::DECORATED_POT],
-            TileNames::DISPENSER => [BlockTypeNames::DISPENSER],
-            TileNames::DROPPER => [BlockTypeNames::DROPPER],
-            TileNames::END_GATEWAY => [BlockTypeNames::END_GATEWAY], // generic block registration, tile not important, not setBlock-able in vanilla, Age Int 0 ExitPortal List{Int,Int,Int}
-            TileNames::END_PORTAL => [BlockTypeNames::END_PORTAL], // generic block registration, tile not important, isMovable 1
-            TileNames::HANGING_SIGN => [
-                BlockTypeNames::ACACIA_HANGING_SIGN,
-                BlockTypeNames::BAMBOO_HANGING_SIGN,
-                BlockTypeNames::BIRCH_HANGING_SIGN,
-                BlockTypeNames::CHERRY_HANGING_SIGN,
-                BlockTypeNames::CRIMSON_HANGING_SIGN,
-                BlockTypeNames::DARK_OAK_HANGING_SIGN,
-                BlockTypeNames::JUNGLE_HANGING_SIGN,
-                BlockTypeNames::MANGROVE_HANGING_SIGN,
-                BlockTypeNames::OAK_HANGING_SIGN,
-                BlockTypeNames::SPRUCE_HANGING_SIGN,
-                BlockTypeNames::WARPED_HANGING_SIGN,
-            ],
-            TileNames::JIGSAW_BLOCK => [BlockTypeNames::JIGSAW], // unknown tags, not setBlock-able in vanilla
-            TileNames::LODESTONE => [BlockTypeNames::LODESTONE], // generic block registration, tile not important, isMovable 1
-            TileNames::PISTON_ARM => [
-                // default:         AttachedBlocks List BreakBlocks List LastProgress Float 0 NewState Byte 0 Progress Float 0 State Byte 0 Sticky Byte 0/1 isMovable 1
-                // fully extended:  AttachedBlocks List BreakBlocks List LastProgress Float 1 NewState Byte 2 Progress Float 1 State Byte 2 Sticky Byte 0/1 isMovable 0, doesn't matter if piston_arm_collision is present
-                BlockTypeNames::PISTON,
-                BlockTypeNames::STICKY_PISTON,
-            ],
-            TileNames::SCULK_SENSOR => [BlockTypeNames::SCULK_SENSOR],
-            TileNames::SCULK_SHRIEKER => [BlockTypeNames::SCULK_SHRIEKER],
-            TileNames::SCULK_CATALYST => [BlockTypeNames::SCULK_CATALYST],
-            TileNames::STRUCTURE_BLOCK => [BlockTypeNames::STRUCTURE_BLOCK],
-            TileNames::TRIAL_SPAWNER => [BlockTypeNames::TRIAL_SPAWNER],
-            TileNames::VAULT => [BlockTypeNames::VAULT]
-        ];
-        $registeredTiles = ReflectionHelper::TileFactoryRegisteredTileIds();
-        foreach ($tiles as $name => $blockNames) {
-            if (in_array($name, $registeredTiles, true)) {
-                $this->getLogger()->debug("Tile $name is already registered!");
-                unset($tiles[$name]);
-                continue;
-            }
-            $need = false;
-            foreach ($blockNames as $block) {
-                if (in_array($block, $blocks, true)) {
-                    $need = true;
-                    break;
-                }
-            }
-            if (!$need) {
-                $this->getLogger()->debug((count($blockNames) > 1 ? "None of " . implode(',', $blockNames) . " is" : "$blockNames[0] is not") . " registered, not registering tile $name");
-                unset($tiles[$name]);
-            }
-        }
-        TileFactory::getInstance()->register(DummyTile::class, array_keys($tiles));
     }
 }

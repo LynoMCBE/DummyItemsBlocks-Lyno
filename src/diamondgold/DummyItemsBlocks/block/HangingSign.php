@@ -40,7 +40,7 @@ class HangingSign extends Transparent
         SignLikeRotationTrait::describeBlockOnlyState as describeSignLikeRotationState;
     }
     use NoneSupportTrait;
-    use DummyTileTrait;
+    // use DummyTileTrait;
 
     protected bool $attached = false;
 
@@ -48,7 +48,6 @@ class HangingSign extends Transparent
     {
         $w->bool($this->attached);
         $this->describeHorizontalFacingState($w);
-        $this->describeSignLikeRotationState($w);
         $this->describeHangingState($w);
     }
 
@@ -84,24 +83,4 @@ class HangingSign extends Transparent
         return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
     }
 
-    /**
-     * @noinspection PhpDeprecationInspection
-     * Please for the love of me, remove deprecation on Sign m( _ _ )m, there's no way it's going to be removed anyway
-     */
-    protected function writeDefaultTileData(CompoundTag $tag): void
-    {
-        $tag->setString(Tile::TAG_ID, "HangingSign");
-        $defaultTag = CompoundTag::create()
-            ->setByte(TileNbtTagNames::HideGlowOutline, 0)
-            ->setByte(Sign::TAG_GLOWING_TEXT, 0)
-            ->setByte(Sign::TAG_PERSIST_FORMATTING, 1)
-            ->setInt(Sign::TAG_TEXT_COLOR, -16777216)
-            ->setString(Sign::TAG_TEXT_BLOB, "")
-            ->setString(TileNbtTagNames::TextOwner, ""); // X-UID
-        $this->setTagIfNotExist($tag, Sign::TAG_FRONT_TEXT, $defaultTag->safeClone());
-        $this->setTagIfNotExist($tag, Sign::TAG_BACK_TEXT, $defaultTag->safeClone());
-        $this->setTagIfNotExist($tag, Sign::TAG_WAXED, new ByteTag(0));
-        $this->setTagIfNotExist($tag, Sign::TAG_LOCKED_FOR_EDITING_BY, new LongTag(-1));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::isMovable, new ByteTag(1));
-    }
 }

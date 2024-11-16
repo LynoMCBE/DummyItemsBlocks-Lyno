@@ -22,7 +22,7 @@ class SculkSensor extends Transparent
     protected int $phase = 0;
 
     use NoneSupportTrait;
-    use DummyTileTrait;
+    // use DummyTileTrait;
 
     public function getPhase(): int
     {
@@ -39,23 +39,6 @@ class SculkSensor extends Transparent
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
         $w->boundedIntAuto(0, 2, $this->phase);
-    }
-
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setPhase(($this->getPhase() + 1) % 3));
-        return true;
-    }
-
-    protected function writeDefaultTileData(CompoundTag $tag): void
-    {
-        $tag->setString(Tile::TAG_ID, TileNames::SCULK_SENSOR);
-        $this->setTagIfNotExist($tag, TileNbtTagNames::VibrationListener, CompoundTag::create()
-            ->setInt(TileNbtTagNames::VibrationListener_event, 19)
-            ->setTag(TileNbtTagNames::VibrationListener_selector, CompoundTag::create())
-        );
-        $this->setTagIfNotExist($tag, TileNbtTagNames::isMovable, new ByteTag(1));
     }
 
     public function getLightLevel(): int

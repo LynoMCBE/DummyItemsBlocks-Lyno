@@ -27,16 +27,6 @@ class CalibratedSculkSensor extends SculkSensor
         parent::describeBlockOnlyState($w);
     }
 
-    protected function writeDefaultTileData(CompoundTag $tag): void
-    {
-        $tag->setString(Tile::TAG_ID, TileNames::CALIBRATED_SCULK_SENSOR);
-        $this->setTagIfNotExist($tag, TileNbtTagNames::VibrationListener, CompoundTag::create()
-            ->setInt(TileNbtTagNames::VibrationListener_event, 6)
-            ->setTag(TileNbtTagNames::VibrationListener_selector, CompoundTag::create())
-        );
-        $this->setTagIfNotExist($tag, TileNbtTagNames::isMovable, new ByteTag(1));
-    }
-
     public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null): bool
     {
         if ($player !== null) {

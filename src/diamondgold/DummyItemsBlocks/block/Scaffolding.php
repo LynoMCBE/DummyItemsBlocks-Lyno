@@ -46,11 +46,4 @@ class Scaffolding extends Transparent
         return $this;
     }
 
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setStability(($this->getStability() + 1) % 8));
-        $player?->sendTip("Stability: " . $this->getStability());
-        return true;
-    }
 }

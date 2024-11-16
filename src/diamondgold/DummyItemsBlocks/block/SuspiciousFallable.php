@@ -26,7 +26,7 @@ class SuspiciousFallable extends Opaque
     use HangingTrait {
         describeBlockOnlyState as describeHangingState;
     }
-    use DummyTileTrait;
+    // use DummyTileTrait;
 
     protected int $brushedProgress = 0;
 
@@ -48,21 +48,4 @@ class SuspiciousFallable extends Opaque
         return $this;
     }
 
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setBrushedProgress((($this->brushedProgress + 1) % 4)));
-        return true;
-    }
-
-    protected function writeDefaultTileData(CompoundTag $tag): void
-    {
-        $tag->setString(Tile::TAG_ID, TileNames::BRUSHABLE_BLOCK);
-        $this->setTagIfNotExist($tag, TileNbtTagNames::LootTable, new StringTag(LootTables::EMPTY_BRUSHABLE_BLOCK->value));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::LootTableSeed, new IntTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::brush_count, new IntTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::brush_direction, new ByteTag(6));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::isMovable, new ByteTag(1));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::type, new StringTag(GlobalBlockStateHandlers::getSerializer()->serializeBlock($this)->getName()));
-    }
 }

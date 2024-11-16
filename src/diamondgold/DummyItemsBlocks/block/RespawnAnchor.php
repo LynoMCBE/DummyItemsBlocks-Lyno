@@ -31,13 +31,6 @@ class RespawnAnchor extends Opaque
         return $this;
     }
 
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setCharges(($this->getCharges() + 1) % 5));
-        return true;
-    }
-
     public function getLightLevel(): int
     {
         return $this->charges > 0 ? ($this->charges > 1 ? 3 + ($this->charges - 1) * 4 : 3) : 0;

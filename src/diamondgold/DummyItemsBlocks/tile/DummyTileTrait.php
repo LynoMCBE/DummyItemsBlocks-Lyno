@@ -13,11 +13,11 @@ trait DummyTileTrait
      * @param CompoundTag $tag
      * @return void
      */
-    abstract protected function writeDefaultTileData(CompoundTag $tag): void;
+    //abstract protected function writeDefaultTileData(CompoundTag $tag): void;
 
     public function onPostPlace(): void
     {
-        $tile = $this->position->getWorld()->getTile($this->position);
+        /*$tile = $this->position->getWorld()->getTile($this->position);
         if ($tile instanceof DummyTile) {
             $nbt = $tile->saveNBT();
             $this->writeDefaultTileData($nbt);
@@ -26,7 +26,7 @@ trait DummyTileTrait
             //$this->position->getWorld()->setBlock($this->position, $this);
         } elseif ($tile !== null) { // this should never happen
             throw new AssumptionFailedError("Expected DummyTile, got " . get_class($tile));
-        }
+        }*/
     }
 
     /**
@@ -38,9 +38,9 @@ trait DummyTileTrait
      */
     protected function setTagIfNotExist(CompoundTag $compoundTag, string $name, Tag $tag): void
     {
-        if ($compoundTag->getTag($name)) {
+        /*if ($compoundTag->getTag($name)) {
             return;
         }
-        $compoundTag->setTag($name, $tag);
+        $compoundTag->setTag($name, $tag);*/
     }
 }

@@ -38,16 +38,4 @@ class PointedDripstone extends Transparent
         return $this;
     }
 
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setThickness(match ($this->getThickness()) {
-            DripstoneThickness::TIP => DripstoneThickness::MERGE,
-            DripstoneThickness::MERGE => DripstoneThickness::FRUSTUM,
-            DripstoneThickness::FRUSTUM => DripstoneThickness::MIDDLE,
-            DripstoneThickness::MIDDLE => DripstoneThickness::BASE,
-            DripstoneThickness::BASE => DripstoneThickness::TIP,
-        }));
-        return true;
-    }
 }

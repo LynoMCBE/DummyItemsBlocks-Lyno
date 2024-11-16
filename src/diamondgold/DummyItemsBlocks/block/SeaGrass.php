@@ -33,18 +33,6 @@ class SeaGrass extends Transparent
         return $this;
     }
 
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setType(match ($this->getType()) {
-            SeaGrassType::DEFAULT => SeaGrassType::DOUBLE_BOT,
-            SeaGrassType::DOUBLE_BOT => SeaGrassType::DOUBLE_TOP,
-            SeaGrassType::DOUBLE_TOP => SeaGrassType::DEFAULT,
-        }));
-        $player?->sendTip("Type: " . $this->type->name);
-        return true;
-    }
-
     public function canBeReplaced(): bool
     {
         return true;

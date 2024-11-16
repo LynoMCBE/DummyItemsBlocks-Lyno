@@ -28,7 +28,7 @@ class CommandBlock extends Opaque
     use AnyFacingTrait {
         describeBlockOnlyState as describeAnyFacingBlockOnlyState;
     }
-    use DummyTileTrait;
+    // use DummyTileTrait;
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
@@ -62,24 +62,4 @@ class CommandBlock extends Opaque
         return true;
     }
 
-    protected function writeDefaultTileData(CompoundTag $tag): void
-    {
-        $tag->setString(Tile::TAG_ID, TileNames::COMMAND_BLOCK);
-        $this->setTagIfNotExist($tag, TileNbtTagNames::Command, new StringTag(""));
-        $this->setTagIfNotExist($tag, Nameable::TAG_CUSTOM_NAME, new StringTag(""));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::ExecuteOnFirstTick, new ByteTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::LPCommandMode, new IntTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::LPConditionalMode, new ByteTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::LPRedstoneMode, new ByteTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::LastExecution, new LongTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::LastOutput, new StringTag(""));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::SuccessCount, new IntTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::TickDelay, new IntTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::TrackOutput, new ByteTag(1));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::Version, new IntTag(34));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::auto, new ByteTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::conditionMet, new ByteTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::isMovable, new ByteTag(1));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::powered, new ByteTag(0));
-    }
 }

@@ -46,11 +46,4 @@ class Jigsaw extends Opaque
         return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
     }
 
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setRotation(($this->getRotation() + 1) % 4));
-        $player?->sendTip("Rotation: " . $this->rotation);
-        return true;
-    }
 }

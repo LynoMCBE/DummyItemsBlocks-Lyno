@@ -38,11 +38,4 @@ class CopperBulb extends Opaque
             }
         */
     }
-
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setLit(!$this->isLit()));
-        return true;
-    }
 }

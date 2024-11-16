@@ -38,12 +38,4 @@ class MangrovePropagule extends Transparent
         $this->stage = $stage;
         return $this;
     }
-
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!$this->hanging || !Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setStage(($this->stage + 1) % 5));
-        $player?->sendTip("Stage: " . $this->stage);
-        return true;
-    }
 }

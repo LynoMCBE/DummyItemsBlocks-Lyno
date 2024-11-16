@@ -33,11 +33,4 @@ class Composter extends Opaque
         $this->fillLevel = $fillLevel;
         return $this;
     }
-
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setFillLevel(($this->getFillLevel() + 1) % 9));
-        return true;
-    }
 }

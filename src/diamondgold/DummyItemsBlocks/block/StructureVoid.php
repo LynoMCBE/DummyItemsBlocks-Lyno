@@ -33,14 +33,4 @@ class StructureVoid extends Flowable
         return $this;
     }
 
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        $this->position->getWorld()->setBlock($this->position, $this->setType(match ($this->getType()) {
-            StructureVoidType::VOID => StructureVoidType::AIR,
-            StructureVoidType::AIR => StructureVoidType::VOID,
-        }));
-        $player?->sendTip("StructureVoidType: " . $this->getType()->name);
-        return true;
-    }
 }

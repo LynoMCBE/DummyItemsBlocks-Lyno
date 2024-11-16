@@ -25,7 +25,7 @@ use pocketmine\world\BlockTransaction;
 
 final class Crafter extends Opaque
 {
-    use DummyTileTrait;
+    // use DummyTileTrait;
 
     private bool $crafting = false;
     private bool $triggered = false;
@@ -99,25 +99,4 @@ final class Crafter extends Opaque
         return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
     }
 
-    public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
-    {
-        if (!Main::canChangeBlockStates($this, $player)) return false;
-        if ($player?->isSneaking()) {
-            $this->position->getWorld()->setBlock($this->position, $this->setTriggered(!$this->isTriggered()));
-            $player->sendTip("Triggered: " . ($this->isTriggered() ? "true" : "false"));
-        } else {
-            $this->position->getWorld()->setBlock($this->position, $this->setCrafting(!$this->isCrafting()));
-            $player?->sendTip("Crafting: " . ($this->isCrafting() ? "true" : "false"));
-        }
-        return true;
-    }
-
-    protected function writeDefaultTileData(CompoundTag $tag): void
-    {
-        $tag->setString(Tile::TAG_ID, TileNames::CRAFTER);
-        $this->setTagIfNotExist($tag, TileNbtTagNames::crafting_ticks_remaining, new IntTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::triggered, new IntTag(0));
-        $this->setTagIfNotExist($tag, TileNbtTagNames::disabled_slots, new ShortTag(0));
-        $this->setTagIfNotExist($tag, Container::TAG_ITEMS, new ListTag());
-    }
 }
